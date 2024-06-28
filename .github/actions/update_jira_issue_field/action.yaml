@@ -1,0 +1,34 @@
+name: 'Update Jira Issue'
+description: 'This action updates a Jira issue field with the given value'
+inputs:
+  jira_api_token:
+    description: 'Jira API Token'
+    required: true
+  jira_email:
+    description: 'Jira Email'
+    required: true
+  jira_base_url:
+    description: 'Jira Base URL'
+    required: true
+  issue_id:
+    description: 'Jira Issue ID'
+    required: true
+  new_value:
+    description: 'New Field Value'
+    required: true
+  field_id:
+    description: 'Field ID'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Run update_jira.bash script
+      run: ./send_request_to_jira.bash
+      shell: bash
+      env:
+        JIRA_API_TOKEN: ${{ inputs.jira_api_token }}
+        JIRA_EMAIL: ${{ inputs.jira_email }}
+        JIRA_BASE_URL: ${{ inputs.jira_base_url }}
+        ISSUE_ID: ${{ inputs.issue_id }}
+        NEW_VALUE: ${{ inputs.new_value }}
+        FIELD_ID: ${{ inputs.field_id }}
