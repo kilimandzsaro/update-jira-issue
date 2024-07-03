@@ -10,14 +10,17 @@ These variables are needed to be able to authenticate to JIRA.
 
 ## Examples
 
-### A github action where it searches for the Jira issue ID in the PRs title, commits or in branch name
+### A github action where it searches for the Jira issue ID in the PRs title, body, commits or in branch name
 
-The following github action is trying to get the Jira issue ID - following the given pattern - from either the branch name, the commit message or the PR title. If neither is found, then it will use the PR's sha to modify the issue's given text field
-
-10052
+The following github action is trying to get the Jira issue ID - following the given pattern - from either the branch name, the commit message or the PR title or PR's body. When the ID is found, it stored in the GITHUB_ENV variables, so other actions can use them
+The order of the search is:
+  - PR title
+  - PR body
+  - Commit
+  - Branch name
 
 ```yaml
-name: Update Jira issue field
+name: Get issue ID from git
 
 on:
   pull_request:
@@ -32,79 +35,101 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up GitHub CLI
-        uses: cli/gh-action@v2
-
-      - name: Get PR details
-        id: pr
-        run: |
-          echo "PR_TITLE=$(gh pr view ${{ github.event.pull_request.number }} --json title --jq .title)" >> $GITHUB_ENV
-          echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
-
-      - name: Search in branch name
-        run: |
-          if [[ "${BRANCH_NAME}" == *"ENG-111"* ]]; then
-            echo "Pattern found in branch name: ${BRANCH_NAME}"
-          else
-            echo "Pattern not found in branch name."
-          fi
-
-      - name: Search in commit messages
-        run: |
-          git fetch origin ${{ github.head_ref }}
-          COMMIT_MATCHES=$(git log origin/${{ github.head_ref }} --pretty=format:"%H %s" | grep -i "ENG-111" || true)
-          if [ -n "$COMMIT_MATCHES" ]; then
-            echo "Pattern found in commit messages:"
-            echo "$COMMIT_MATCHES"
-          else
-            echo "Pattern not found in commit messages."
-          fi
-
-      - name: Search in pull request title
-        run: |
-          if [[ "${PR_TITLE}" == *"ENG-111"* ]]; then
-            echo "Pattern found in pull request title: ${PR_TITLE}"
-          else
-            echo "Pattern not found in pull request title."
-          fi
-```
-
-
-
-Action to get the JIRA issue ID from either the PR title, or from branch name, or from the commits on the branch:
-
-
-
+      - name: Get Issue ID or sha
+        id: get-id
+        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_pr_commit_branch@v1
+        with: 
+          pattern: "XXX-[0-9]+"
+          branch_name: ${{ github.head_ref }}
+          remote: origin
 
 ```
+
+### Update the given Jira issue field with the specified value
+
+This action is trying to connect to Jira using it's API and update some field of the given Issue. There are some pre-requisits for this action.
+
+Pre-requisits:
+  - JIRA_BASE_URL environment variable to set to your Jira instance (eg: https://my-company.atlassian.net)
+  - JIRA_API_TOKEN environment variable to set to your Jira's PAT (personal access token: https://confluence.atlassian.com/enterprise/using-personal-access-tokens-1026032365.html)
+  - JIRA_USER_EMAIL environment variable to set which matches to the email used to login to Jira (and used to generate the PAT)
+
+The action requires 3 input parameters:
+      1. `issue_id` the ID of the Jira issue. 
+         This is the ID of the issue you plan to modify. Usually it looks like <PROJECTKEY>-<NUMBERS>. Eg.: XXX-111
+      2. `field_id` which needs to be modified
+         Here you can find a way how to get your field ID: https://confluence.atlassian.com/jirakb/how-to-find-any-custom-field-s-ids-744522503.html
+      3. `new_value` is the new value to set to the field.
+         If the new value is not 1 string, then you have to quote it, otherwise only the first string will be used during the update
+
+Example action:
+
+```yaml
+name: Update Jira issue
+
 on:
-  push
-
-name: Test Transition Issue
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  fill-release-in-issue:
-    name: Release issue
+  check-pattern:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Login
-      uses: atlassian/gajira-login@v3
-      env:
-        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Update Jira Issue
+        uses: kilimandzsaro/update-jira-issue/send_request_to_jira@v1
+        with: 
+          jira_api_token: ${{ secrets.JIRA_API_TOKEN }}
+          jira_email: ${{ secrets.JIRA_EMAIL }}
+          jira_base_url: ${{ secrets.JIRA_BASE_URL }}
+          issue_id: XXX-111
+          field_id: customfield_10052
+          new_value: "whatever you want"
 
-    - name: Find Issue Key
-      uses: ./
-      with:
-        from: commits
+```
 
-    - name: Transition issue
-      uses: atlassian/gajira-transition@master
-      with:
-        issue: ${{ steps.create.outputs.issue }}
-        transition: "In Progress"
+### Combining the two actions
+
+You can combine the two actions and use the first action's output as an input to the second one.
+
+Example combined action:
+
+```yaml
+name: Get issue ID from git
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check-pattern:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get Issue ID or sha
+        id: get-id
+        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_pr_commit_branch@v1
+        with: 
+          pattern: "XXX-[0-9]+"
+          branch_name: ${{ github.head_ref }}
+          remote: origin
+
+      - name: Update Jira Issue
+        uses: kilimandzsaro/update-jira-issue/send_request_to_jira@v1
+        with: 
+          jira_api_token: ${{ secrets.JIRA_API_TOKEN }}
+          jira_email: ${{ secrets.JIRA_EMAIL }}
+          jira_base_url: ${{ secrets.JIRA_BASE_URL }}
+          issue_id: ${{ steps.get-id.outputs.issue_id }}
+          field_id: customfield_10052
+          new_value: "whatever you want"
+
 ```

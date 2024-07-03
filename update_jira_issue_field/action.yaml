@@ -23,12 +23,9 @@ runs:
   using: 'composite'
   steps:
     - name: Run update_jira.bash script
-      run: ./send_request_to_jira.bash
+      run: ./send_request_to_jira.bash ${{ inputs.issue_id }} ${{ inputs.field_id }} ${{ inputs.new_value }}
       shell: bash
       env:
         JIRA_API_TOKEN: ${{ inputs.jira_api_token }}
         JIRA_EMAIL: ${{ inputs.jira_email }}
         JIRA_BASE_URL: ${{ inputs.jira_base_url }}
-        ISSUE_ID: ${{ inputs.issue_id }}
-        NEW_VALUE: ${{ inputs.new_value }}
-        FIELD_ID: ${{ inputs.field_id }}
