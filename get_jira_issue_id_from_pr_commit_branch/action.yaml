@@ -1,0 +1,28 @@
+name: 'Get Jira Issue ID from Git'
+description: 'This action tries to find the Jira issue ID in the PR title, in the commit or in the branch name'
+inputs:
+  issue_pattern:
+    description: 'The pattern to search in the mentioned places. Eg: "XXX-\d+" (use quotes when you define them!)'
+    required: true
+  branch:
+    description: 'The branch name to use'
+    required: true
+  remote:
+    description: 'The default is `origin`, if your repository is using other then origin, then with this variable you can set it'
+    required: false
+outputs:
+  issue_id:
+    description: "The Jira Issue ID found with the script or the sha of the PR if not."
+    value: ${{ steps.run-script.outputs.issue_id }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Run find_issue_id_in_pr_branch_commit.bash script
+      id: run-script
+      run: |
+        if [ -n "${{ inputs.remote }}"" ]; then
+          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.issue_pattern}} -b {{ inputs.branch }} -r {{ inputs.remote }}
+        else
+          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.issue_pattern}} -b {{ inputs.branch }}
+        fi
+      shell: bash
