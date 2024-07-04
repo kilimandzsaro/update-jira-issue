@@ -21,8 +21,8 @@ runs:
       id: run-script
       run: |
         if [ -n "${{ inputs.remote }}" ]; then
-          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.pattern}} -b {{ inputs.branch }} -r {{ inputs.remote }}
+          ${{ github.action_path }}/find_issue_id_in_pr_branch_commit.bash -p {{ inputs.pattern}} -b {{ inputs.branch }} -r {{ inputs.remote }}
         else
-          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.pattern}} -b {{ inputs.branch }}
+          ${{ github.action_path }}/find_issue_id_in_pr_branch_commit.bash -p {{ inputs.pattern}} -b {{ inputs.branch }}
         fi
       shell: bash
