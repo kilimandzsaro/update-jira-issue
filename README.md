@@ -119,11 +119,11 @@ jobs:
         uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_pr_commit_branch@v1
         with: 
           pattern: "XXX-[0-9]+"
-          branch_name: ${{ github.head_ref }}
+          branch: ${{ github.head_ref }}
           remote: origin
 
       - name: Update Jira Issue
-        uses: kilimandzsaro/update-jira-issue/send_request_to_jira@v1
+        uses: kilimandzsaro/update-jira-issue/update_jira_issue_field@v1
         with: 
           jira_api_token: ${{ secrets.JIRA_API_TOKEN }}
           jira_email: ${{ secrets.JIRA_EMAIL }}

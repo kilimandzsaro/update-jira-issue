@@ -1,7 +1,7 @@
 name: 'Get Jira Issue ID from Git'
 description: 'This action tries to find the Jira issue ID in the PR title, in the commit or in the branch name'
 inputs:
-  issue_pattern:
+  pattern:
     description: 'The pattern to search in the mentioned places. Eg: "XXX-\d+" (use quotes when you define them!)'
     required: true
   branch:
@@ -21,8 +21,8 @@ runs:
       id: run-script
       run: |
         if [ -n "${{ inputs.remote }}"" ]; then
-          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.issue_pattern}} -b {{ inputs.branch }} -r {{ inputs.remote }}
+          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.pattern}} -b {{ inputs.branch }} -r {{ inputs.remote }}
         else
-          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.issue_pattern}} -b {{ inputs.branch }}
+          ./find_issue_id_in_pr_branch_commit.bash -p {{ inputs.pattern}} -b {{ inputs.branch }}
         fi
       shell: bash
