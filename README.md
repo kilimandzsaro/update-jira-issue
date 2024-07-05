@@ -83,12 +83,13 @@ jobs:
       - name: Update Jira Issue
         uses: kilimandzsaro/update-jira-issue/send_request_to_jira@v1
         with: 
-          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
           issue_id: XXX-111
           field_id: customfield_10052
           new_value: "whatever you want"
+        env:
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
 
 ```
 
@@ -125,11 +126,12 @@ jobs:
       - name: Update Jira Issue
         uses: kilimandzsaro/update-jira-issue/update_jira_issue_field@v1
         with: 
-          jira_api_token: ${{ secrets.JIRA_API_TOKEN }}
-          jira_email: ${{ secrets.JIRA_EMAIL }}
-          jira_base_url: ${{ secrets.JIRA_BASE_URL }}
-          issue_id: ${{ steps.get-id.outputs.issue_id }}
+          issue_id: ${{ env.issue_id }}
           field_id: customfield_10052
           new_value: "whatever you want"
+        env:
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
 
 ```
