@@ -1,15 +1,6 @@
 name: 'Update Jira Issue'
-description: 'This action updates a Jira issue field with the given value'
+description: 'This action updates a Jira issue field with the given value. Do not forget to set the JIRA environment variables!!!'
 inputs:
-  jira_api_token:
-    description: 'Jira API Token'
-    required: true
-  jira_email:
-    description: 'Jira Email'
-    required: true
-  jira_base_url:
-    description: 'Jira Base URL'
-    required: true
   issue_id:
     description: 'Jira Issue ID'
     required: true
@@ -25,7 +16,3 @@ runs:
     - name: Run update_jira.bash script
       run: ${{ github.action_path }}/send_request_to_jira.bash -i ${{ inputs.issue_id }} -f ${{ inputs.field_id }} -v ${{ inputs.new_value }}
       shell: bash
-      env:
-        JIRA_API_TOKEN: ${{ inputs.jira_api_token }}
-        JIRA_USER_EMAIL: ${{ inputs.jira_email }}
-        JIRA_BASE_URL: ${{ inputs.jira_base_url }}
