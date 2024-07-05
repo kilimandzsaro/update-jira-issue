@@ -27,5 +27,5 @@ runs:
       shell: bash
       env:
         JIRA_API_TOKEN: ${{ inputs.jira_api_token }}
-        JIRA_EMAIL: ${{ inputs.jira_email }}
+        JIRA_USER_EMAIL: ${{ inputs.jira_email }}
         JIRA_BASE_URL: ${{ inputs.jira_base_url }}
