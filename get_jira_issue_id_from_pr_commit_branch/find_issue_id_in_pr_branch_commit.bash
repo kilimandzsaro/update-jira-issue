@@ -165,18 +165,6 @@ search_in_pr_body() {
     return 1
 }
 
-# Function to get the PR SHA
-get_pr_sha() {
-    pr_sha=$(gh pr view --json commits --jq '.commits[0].oid' 2>/dev/null)
-    if [ -n "$pr_sha" ]; then
-        echo "Using the PR's SHA"
-        echo "$pr_sha"
-        echo "issue_id=${pr_sha}" >> $GITHUB_ENV
-    else
-        echo "PR SHA not found."
-    fi
-}
-
 # ----------  end of functions
 
 cleanup () { # Will be called by the trap above, no need to call it manually.
@@ -197,9 +185,6 @@ main () {
     elif search_in_commit_messages; then
         exit 0
     elif search_in_branch_name; then
-        exit 0
-    else
-        get_pr_sha
         exit 0
     fi
 

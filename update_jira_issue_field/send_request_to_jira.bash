@@ -40,6 +40,7 @@ OPTIONSLONG=help,issue_id:,field_id:,new_value:,version
 
 # Help page
 usage () {
+    exit_code=${1:=0}
     echo "
     This sciprt tries to update the given field of the given Jira issue. It uses Jira's API to do so.
     Pre-requisits:
@@ -64,7 +65,7 @@ usage () {
     -v|--new_value     The value you want to add to the given field
     -V|--version       Display script version
     "
-    exit 0
+    exit $exit_code
 }
 
 # Checks if the given variable is defined and not empty.
@@ -91,7 +92,7 @@ check_jira_auth_variables() {
 option_handling() {
     if [ $# -lt 6 ]; then
         echo "Missing some parameters"
-        usage
+        usage 1
     fi
     OPTS=$(getopt --name "$0" --options $OPTIONS --longoptions $OPTIONSLONG -- "$@") || (echo; echo "See above and try \"$0 --help\""; echo ; exit 1)
 
