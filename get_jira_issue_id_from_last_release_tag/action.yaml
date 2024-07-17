@@ -21,5 +21,5 @@ runs:
         export LC_ALL=en_US.utf8
         issues=`git log $(git describe --abbrev=0 --tags 2> /dev/null || git rev-list --max-parents=0 HEAD)..HEAD | \
           grep -oE "${{ inputs.pattern }}" | sort | uniq | \
-          sed 's/^\|$/"/g' | paste -sd , - | awk '{print $0}' >> $GITHUB_OUTPUT
+          sed 's/^\|$/"/g' | paste -sd , - | awk '{print $0}'` >> $GITHUB_OUTPUT
       shell: bash
