@@ -1,0 +1,42 @@
+name: "Jira Web Hook"
+description: "Sends a webhook to Jira with the given parameters as data. Highly configurable."
+inputs:
+  jira-automation-webhook:
+    description: "Jira automation webhook url"
+    required: true
+  jira-issue-ids:
+    description: "A list of jira issue ids to send in the request"
+    required: false
+  request-data:
+    description: "The data to send in the jira body in json style"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Fetch entire Git history (including tags)
+      run: git fetch --prune --unshallow --tags
+      shell: bash
+
+    - name: Collect issue numbers since last release/tag
+      run: |
+        export LC_ALL=en_US.utf8
+        git log $(git describe --abbrev=0 --tags 2> /dev/null || git rev-list --max-parents=0 HEAD)..HEAD | \
+          grep -oE "${{ inputs.jira-project-key }}-[[:digit:]]{1,}" | sort | uniq | \
+          sed 's/^\|$/"/g' | paste -sd , - | awk '{print "RELATED_JIRA_ISSUES="$0}' >> $GITHUB_ENV
+      shell: bash
+
+    - name: Create json and invoke webhook
+      run: |
+        json=$(jq -n \
+          --arg issues "${{ inputs.jira-issue-ids }}" \
+          --arg data "${{ inputs.request-data }}" \
+          '{
+            issues: [$issues],
+            data: $data
+          }')
+        echo "The body I'll send: ${json}"
+        curl -X POST \
+          -H "Content-Type: application/json" \
+          -d "$json" \
+          "${{ inputs.jira-automation-webhook }}"
+      shell: bash
