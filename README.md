@@ -33,11 +33,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get Issue ID or sha
         id: get-id
-        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_pr_commit_branch@v1
+        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_pr_commit_branch@v2
         with: 
           pattern: "XXX-[0-9]+"
           branch_name: ${{ github.head_ref }}
@@ -78,10 +78,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Update Jira Issue
-        uses: kilimandzsaro/update-jira-issue/send_request_to_jira@v1
+        uses: kilimandzsaro/update-jira-issue/send_request_to_jira@v2
         with: 
           issue_id: XXX-111
           field_id: customfield_10052
@@ -113,18 +113,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get Issue ID or sha
         id: get-id
-        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_pr_commit_branch@v1
+        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_pr_commit_branch@v2
         with: 
           pattern: "XXX-[0-9]+"
           branch: ${{ github.head_ref }}
           remote: origin
 
       - name: Update Jira Issue
-        uses: kilimandzsaro/update-jira-issue/update_jira_issue_field@v1
+        uses: kilimandzsaro/update-jira-issue/update_jira_issue_field@v2
         with: 
           issue_id: ${{ env.issue_id }}
           field_id: customfield_10052
@@ -134,4 +134,116 @@ jobs:
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
 
+```
+
+# get jira issue ID from last release tag
+
+This action goes over the git log and tries to find the pattern specified as input. It returns with the found results as an array.
+It tries to find the given pattern since the last release tag. It uses tags, so if your repository doesn't use them, then this is not for you.
+The output is stored in the `issues` variable
+
+## Example
+
+```yaml
+name: Get issues from last release
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  get-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get Issue IDs
+        id: get-ids
+        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_last_release_tag@v2
+        with: 
+          pattern: "XXX-[0-9]+"
+
+```
+
+# send_to_jira_webhook
+
+This action is a generalization of the `update_jira_issue_field` action. You have full control over the body which is sent to jira so you can customize the automation in jira.
+The base idea is coming from this action: https://github.com/GeoWerkstatt/create-jira-release
+Only the webhook URL is the mandatory input parameter.
+
+## Example
+
+```yaml
+name: Send to Jira
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  get-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Issue IDs
+        id: get-ids
+        uses: kilimandzsaro/update-jira-issue/send_to_jira_webhook@v2
+        with: 
+          jira-automation-webhook: "https://xxx.atlassian.com/xxxxxx"
+          jira-issue-ids: ["XXX-111", "XXX-222"]
+          request-data: { "field1": "value1", "field2": "value2" }
+```
+
+### Combining some actions
+
+This is an example how you can combine some of the actions
+
+```yaml
+name: Sending info to Jira
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check-pattern:
+    runs-on: ubuntu-latest
+    env:
+      jira_project_id: XXX
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get Issue IDs
+        id: get-ids
+        uses: kilimandzsaro/update-jira-issue/get_jira_issue_id_from_last_release_tag@v2
+        with: 
+          pattern: "XXX-[0-9]+"
+      
+      - name: build request body
+        id: request-body
+        run: |
+          body=$(jq -n \
+            --arg version: "v0.0.0" \
+            --arg projectName "${{ env.jira_project_id }}" \
+            --arg repository "${{ github.event.repository.name }}" \
+            '{
+              version: $version,
+              projectName: $projectName,
+              repository: $repository
+            }') >> GITHUB_OUTPUT
+
+      - name: Get Issue IDs
+        id: get-ids
+        uses: kilimandzsaro/update-jira-issue/send_to_jira_webhook@v2
+        with: 
+          jira-automation-webhook: "https://xxx.atlassian.com/xxxxxx"
+          jira-issue-ids: ${{ steps.get-ids.outputs.issues }}
+          request-data: ${{ steps.request-body.outputs.body }}
 ```
