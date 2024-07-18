@@ -7,7 +7,7 @@ inputs:
 outputs:
   issues:
     description: "The list of the found issues"
-    value: ${{ steps.collect-issues.outputs.issue_id }}
+    value: ${{ steps.collect-issues.outputs.issues }}
 runs:
   using: "composite"
   steps:
