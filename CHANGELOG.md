@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.4](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.3...v2.0.4) (2024-07-18)
+
+
+### Miscellaneous
+
+* rewrite git log for tag finder ([#12](https://github.com/kilimandzsaro/update-jira-issue/issues/12)) ([61fa886](https://github.com/kilimandzsaro/update-jira-issue/commit/61fa88689fc42190c4652f578ea00668f7a20f6d))
+
 ## [2.0.3](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.2...v2.0.3) (2024-07-18)
 
 
