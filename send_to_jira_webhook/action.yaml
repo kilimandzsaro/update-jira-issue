@@ -20,7 +20,7 @@ runs:
           --argjson data "${{ inputs.request-data }}" \
           '{
             issues: [$issues],
-            data: "$data"
+            data: $data
           }')
         echo "The body I'll send: ${json}"
         curl -X POST \

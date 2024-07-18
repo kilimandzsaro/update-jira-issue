@@ -239,8 +239,8 @@ jobs:
               version: $version,
               projectName: $projectName,
               repository: $repository
-            }')
-            echo "body=`$body | sed 's/"/\\\"/g` >> GITHUB_OUTPUT
+            }' | sed 's/"/\\\"/g )
+            echo "body=`$body` >> GITHUB_OUTPUT
 
       - name: Send jira request
         id: send-request
