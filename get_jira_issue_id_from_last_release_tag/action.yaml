@@ -21,7 +21,7 @@ runs:
         export LC_ALL=en_US.utf8
         messages=`git --no-pager log --all --pretty=format:%B%N $(git tag --sort=-committerdate | head -1)...$(git tag --sort=-committerdate | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')`
         echo $messages
-        issues=`echo $messages | grep -oE ${{ inputs.pattern }} | sort | uniq`
+        issues=`echo $messages | grep -oE ${{ inputs.pattern }} | sort | uniq | sed 's/^\|$/"/g' | paste -sd , - `
         echo $issues
         echo "issues=$issues" >> $GITHUB_OUTPUT
       shell: bash
