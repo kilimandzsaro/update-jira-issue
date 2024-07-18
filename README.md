@@ -200,7 +200,9 @@ jobs:
 
 ### Combining some actions
 
-This is an example how you can combine some of the actions
+This is an example how you can combine some of the actions.
+When you are building the request body, DON'T FORGET TO ESCAPE THE DOUBLE QUOTES!
+The send jira request is using double quotes (") to wrap around the `data` body which should be a json.
 
 ```yaml
 name: Sending info to Jira
@@ -237,10 +239,11 @@ jobs:
               version: $version,
               projectName: $projectName,
               repository: $repository
-            }') >> GITHUB_OUTPUT
+            }')
+            echo "body=`$body | sed 's/"/\\\"/g` >> GITHUB_OUTPUT
 
-      - name: Get Issue IDs
-        id: get-ids
+      - name: Send jira request
+        id: send-request
         uses: kilimandzsaro/update-jira-issue/send_to_jira_webhook@v2
         with: 
           jira-automation-webhook: "https://xxx.atlassian.com/xxxxxx"
