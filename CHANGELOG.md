@@ -5,6 +5,14 @@
 
 ### Bug Fixes
 
+* add missing quotes ([0f86a10](https://github.com/kilimandzsaro/update-jira-issue/commit/0f86a108abc2289c0ec28196f193fec5baf4db78))
+* versions ([825ad04](https://github.com/kilimandzsaro/update-jira-issue/commit/825ad0417de019d2fa201e07551c8635f9073731))
+
+## [2.0.10](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.9...v2.0.10) (2024-07-18)
+
+
+### Bug Fixes
+
 * add argjson to jq creation ([16578d8](https://github.com/kilimandzsaro/update-jira-issue/commit/16578d85ed42464266f0b789274ada23fa0df349))
 
 ## [2.0.9](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.8...v2.0.9) (2024-07-18)
