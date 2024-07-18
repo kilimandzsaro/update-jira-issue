@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.5](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.4...v2.0.5) (2024-07-18)
+
+
+### Bug Fixes
+
+* add all to tag finder ([#14](https://github.com/kilimandzsaro/update-jira-issue/issues/14)) ([a963fe6](https://github.com/kilimandzsaro/update-jira-issue/commit/a963fe676b1b0257429c374c52dc0e1e2b796cf2))
+
 ## [2.0.4](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.3...v2.0.4) (2024-07-18)
 
 
