@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.7](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.6...v2.0.7) (2024-07-18)
+
+
+### Bug Fixes
+
+* add missing tick and sort unique ([#18](https://github.com/kilimandzsaro/update-jira-issue/issues/18)) ([17ff396](https://github.com/kilimandzsaro/update-jira-issue/commit/17ff396bde0995599c0274c2f5064a59c845d34a))
+
 ## [2.0.6](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.5...v2.0.6) (2024-07-18)
 
 
