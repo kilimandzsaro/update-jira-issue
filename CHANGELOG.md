@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.9](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.8...v2.0.9) (2024-07-18)
+
+
+### Bug Fixes
+
+* flatten issues array ([#22](https://github.com/kilimandzsaro/update-jira-issue/issues/22)) ([ec54ad5](https://github.com/kilimandzsaro/update-jira-issue/commit/ec54ad503f1cddd57c029ba4324c2af16f5f8c86))
+
 ## [2.0.8](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.7...v2.0.8) (2024-07-18)
 
 
