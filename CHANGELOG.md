@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.6](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.5...v2.0.6) (2024-07-18)
+
+
+### Bug Fixes
+
+* add missing grep to action ([#16](https://github.com/kilimandzsaro/update-jira-issue/issues/16)) ([d932fa4](https://github.com/kilimandzsaro/update-jira-issue/commit/d932fa46e2c53447e453da483d3c5f7af133c467))
+
 ## [2.0.5](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.4...v2.0.5) (2024-07-18)
 
 
