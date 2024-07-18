@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.8](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.7...v2.0.8) (2024-07-18)
+
+
+### Bug Fixes
+
+* issues variable storage ([#20](https://github.com/kilimandzsaro/update-jira-issue/issues/20)) ([4ca4e54](https://github.com/kilimandzsaro/update-jira-issue/commit/4ca4e546822ecac2d31f628c082e61ebae6ff4a0))
+
 ## [2.0.7](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.6...v2.0.7) (2024-07-18)
 
 
