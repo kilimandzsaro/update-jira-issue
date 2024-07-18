@@ -19,7 +19,5 @@ runs:
       id: collect-issues
       run: |
         export LC_ALL=en_US.utf8
-        issues=`git log $(git describe --abbrev=0 --tags 2> /dev/null || git rev-list --max-parents=0 HEAD)..HEAD | \
-          grep -oE "${{ inputs.pattern }}" | sort | uniq | \
-          sed 's/^\|$/"/g' | paste -sd , - | awk '{print $0}'` >> $GITHUB_OUTPUT
+        issue=`git --no-pager log --pretty=format:%B%N $(git tag --sort=-committerdate | head -1)...$(git tag --sort=-committerdate | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')` >> $GITHUB_OUTPUT
       shell: bash
