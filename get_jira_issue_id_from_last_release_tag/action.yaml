@@ -19,5 +19,7 @@ runs:
       id: collect-issues
       run: |
         export LC_ALL=en_US.utf8
-        issue=`git --no-pager log --all --pretty=format:%B%N $(git tag --sort=-committerdate | head -1)...$(git tag --sort=-committerdate | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')` >> $GITHUB_OUTPUT
+        messages=`git --no-pager log --all --pretty=format:%B%N $(git tag --sort=-committerdate | head -1)...$(git tag --sort=-committerdate | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')`
+        echo $messages
+        issues=`echo $messages | grep -oE ${{ inputs.pattern }} >> $GITHUB_OUTPUT
       shell: bash
