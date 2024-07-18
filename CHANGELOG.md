@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.2...v2.0.3) (2024-07-18)
+
+
+### Bug Fixes
+
+* add proper variable name ([#10](https://github.com/kilimandzsaro/update-jira-issue/issues/10)) ([dc53ffa](https://github.com/kilimandzsaro/update-jira-issue/commit/dc53ffa99a0bb70f9376c76703d497d6bbe3ff64))
+
 ## [2.0.0](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.1...v2.0.0) (2024-07-18)
 
 
