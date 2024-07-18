@@ -17,7 +17,7 @@ runs:
       run: |
         json=$(jq -n \
           --arg issues "${{ inputs.jira-issue-ids }}" \
-          --arg data "${{ inputs.request-data }}" \
+          --argjson data ${{ inputs.request-data }} \
           '{
             issues: [$issues],
             data: $data
