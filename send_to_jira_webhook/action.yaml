@@ -19,7 +19,7 @@ runs:
           --arg issues "${{ inputs.jira-issue-ids }}" \
           --argjson data "${{ inputs.request-data }}" \
           '{
-            issues: [$issues],
+            issues: $issues | split(","),
             data: $data
           }')
         echo "The body I'll send: ${json}"
