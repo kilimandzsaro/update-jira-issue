@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.10](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.9...v2.0.10) (2024-07-23)
+
+
+### Miscellaneous
+
+* add empty issue checker ([51dc0ef](https://github.com/kilimandzsaro/update-jira-issue/commit/51dc0ef9caa17d49e765921d0541caefe4064360))
+
 ## [2.0.10](https://github.com/kilimandzsaro/update-jira-issue/compare/v2.0.9...v2.0.10) (2024-07-18)
 
 
